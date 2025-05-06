@@ -1,0 +1,29 @@
+<html>
+<head>
+    <title>IP Logger</title>
+</head>
+<body>
+    <h1>Your IP is:</h1>
+    <p id="ip">Loading...</p>
+
+    <script>
+      // Fetch visitor's IP from ipify
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+          const ip = data.ip;
+          document.getElementById('ip').textContent = ip;
+          
+          // Log to Google Sheets (REPLACE THIS URL!)
+          fetch('https://script.google.com/macros/s/AKfycbzeAPaOBYKfQo-pYRyVcW5rM2GGLv0WhXfdeqSwjIjOgno0TaYIikUUKBpUNDeQYojpcw/exec?ip=' + ip)
+            .then(response => response.text())
+            .then(text => console.log("Logged to Google Sheets:", text))
+            .catch(error => console.error("Error logging IP:", error));
+        })
+        .catch(error => {
+          document.getElementById('ip').textContent = "Failed to detect IP";
+          console.error("IP detection failed:", error);
+        });
+    </script>
+</body>
+</html>
